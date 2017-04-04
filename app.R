@@ -2,7 +2,7 @@ library(shiny)
 library(stringr)
 library(openxlsx)
 library(zoo)
-temp <- read.xlsx("listi.xlsx")
+
 template <- read.csv("data/templ.csv")
 template <- template[NULL,]
 
@@ -19,7 +19,7 @@ ui = fluidPage(
         titlePanel("Lagfæring á skrám úr Völunni"),
         sidebarLayout(
                 sidebarPanel(
-                        fileInput('file1', 'Veljið .xlsx skrá'),
+                        fileInput('file1', 'Veljið .xls skrá'),
                         downloadButton('downloadEmail', 'Sækja lista fyrir outlook'),
                         downloadButton('downloadData', 'Sækja lista yfir foreldra'),
                         p(),
@@ -27,9 +27,9 @@ ui = fluidPage(
                         p("noi.kristinsson hja reykjavik.is")
                 ),
                 mainPanel(
-                        h3("Mikilvægt"),
-                        h4("Opnið skjalið úr völunni í Excel og vistið sem .xlsx"),
-                        h4("Annars mun þetta ekki virka."),
+                        h3("Ath"),
+                        h4("Þetta notast við skránna: Skýrslur -> listar -> Aðstandendur barna"),
+                        h4("Þegar þú sækir skrá opnast nýr gluggi, tómur. Það má loka honum."),
                         br(),
                         p(strong("Outlook"), "mun gefa CSV skrá sem hægt er að importa inn í outlook"),
                         p(strong("Listi yfir foreldra"), "er hugsað sem skjal fyrir foreldrafélagið.")
@@ -43,13 +43,20 @@ server = function(input, output, session){
         dataf.fixed <- reactive({
                 inFile <- input$file1
                 if (is.null(inFile)) return(NULL)
-                dataf <- read.xlsx(inFile$datapath)
+                dataf <- as.data.frame(readHTMLTable(inFile$datapath, encoding = "UTF-8"))
                 
-                colnames(dataf) <- dataf[2,]
-                dataf <- dataf[-nrow(dataf),]
-                dataf <- dataf[-1:-2,]
-                dataf$kennitalabarns <- as.character(0000000000) 
-                dataf <- dataf[,c(1,11,2:10)]
+                dataf[dataf == ""] <- NA
+               
+                dataf <- dataf[,c(6,8:10,15)]
+                dataf$kennitalabarns <- as.character(0000000000)
+                dataf <- dataf[,c(1,6,2:5)]
+                colnames(dataf) <- c("Barn", "kennitalabarns", "Deild", "Kennitala", "Aðstandandi", "Netfang")
+                dataf[,1] <- as.character(dataf[,1])
+                dataf[,3] <- as.character(dataf[,3])
+                dataf[,5] <- as.character(dataf[,5])
+                dataf[,6] <- as.character(dataf[,6])
+                dataf[,4] <- as.character(dataf[,4])
+                
                 dataf$kennitalabarns <- ifelse(is.na(dataf$Aðstandandi), dataf$Kennitala, NA)
                 bil <- " // "
                 
@@ -79,7 +86,8 @@ server = function(input, output, session){
                 
                 print(3)
                 email.datab$First.Name <- paste0(dataf$Barn, bil, dataf$Aðstandandi)       
-                email.datab$E.mail.Address <- paste0(dataf$Netfang) 
+                email.datab$E.mail.Address <- dataf$Netfang
+                email.datab$Department <- dataf$Deild
                 
                 email.datab
                 })

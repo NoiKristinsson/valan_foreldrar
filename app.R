@@ -2,6 +2,7 @@ library(shiny)
 library(stringr)
 library(openxlsx)
 library(zoo)
+library(XML)
 
 template <- read.csv("data/templ.csv")
 template <- template[NULL,]

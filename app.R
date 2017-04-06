@@ -4,8 +4,11 @@ library(openxlsx)
 library(zoo)
 library(XML)
 
-template <- read.csv("data/templ.csv")
-template <- template[NULL,]
+all_content = readLines("data/templ.csv")
+skip_second = all_content[1]
+template = read.csv(textConnection(skip_second), header = TRUE, stringsAsFactors = FALSE, check.names = FALSE)
+
+bil <- " // "
 
 shorten <- function(x){
         if (str_count(x, " ") == 1) {
@@ -59,7 +62,7 @@ server = function(input, output, session){
                 dataf[,4] <- as.character(dataf[,4])
                 
                 dataf$kennitalabarns <- ifelse(is.na(dataf$Aðstandandi), dataf$Kennitala, NA)
-                bil <- " // "
+                
                 
                 dataf$kennitalabarns <- na.locf(dataf$kennitalabarns)
                 dataf$Barn <- na.locf(dataf$Barn)
@@ -111,7 +114,6 @@ server = function(input, output, session){
              
                     })
         
-        
         #output$contents <- renderDataTable({
         #        
         #        foreldrar.ready()
@@ -120,13 +122,13 @@ server = function(input, output, session){
         output$downloadEmail <- downloadHandler(
                 filename = function() { paste0("fyrir_outlook", ".csv") },
                 content = function(file) {
-                        write.csv(outlook(), file)
+                        write.csv(outlook(), file, quote = FALSE, row.names = FALSE, eol = "\r\n")
                         }
         )
         output$downloadData <- downloadHandler(
                 filename = function() { paste0("fyrir_foreldrafelag", ".xlsx") },
                 content = function(file) {
-                        write.xlsx(foreldrar.ready(), file)
+                        write.xlsx(foreldrar.ready(), file, quote = FALSE)
                 }
         )
 }

@@ -1,0 +1,11 @@
+name: valan
+title: valan
+account: noikristinsson
+server: shinyapps.io
+appId: 169042
+bundleId: 778617
+url: https://noikristinsson.shinyapps.io/valan/
+when: 1491432313.6076
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|list.xls|listi.xlsx|test.R|vidvera.xls|Valan_lagfaeringar_skjol/.git/config|Valan_lagfaeringar_skjol/.git/description|Valan_lagfaeringar_skjol/.git/FETCH_HEAD|Valan_lagfaeringar_skjol/.git/HEAD|Valan_lagfaeringar_skjol/.git/hooks/applypatch-msg.sample|Valan_lagfaeringar_skjol/.git/hooks/commit-msg.sample|Valan_lagfaeringar_skjol/.git/hooks/post-update.sample|Valan_lagfaeringar_skjol/.git/hooks/pre-applypatch.sample|Valan_lagfaeringar_skjol/.git/hooks/pre-commit.sample|Valan_lagfaeringar_skjol/.git/hooks/pre-push.sample|Valan_lagfaeringar_skjol/.git/hooks/pre-rebase.sample|Valan_lagfaeringar_skjol/.git/hooks/pre-receive.sample|Valan_lagfaeringar_skjol/.git/hooks/prepare-commit-msg.sample|Valan_lagfaeringar_skjol/.git/hooks/update.sample|Valan_lagfaeringar_skjol/.git/info/exclude
